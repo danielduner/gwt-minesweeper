@@ -2,6 +2,8 @@ package se.danielduner.minesweeper.client;
 
 import java.util.Random;
 
+import com.sun.org.apache.bcel.internal.generic.RETURN;
+
 public class MineField {
 	
 	public enum GameStatus {
@@ -58,7 +60,9 @@ public class MineField {
 	public int getValue(int x, int y) {
 		if (gameStatus!=GameStatus.PLAYING && mines[x][y]) {
 			return MINE;
-		} if(!exposed[x][y]){
+		} if(flagged[x][y]) {
+			return FLAGGED;
+		}if(!exposed[x][y]){
 			return HIDDEN;
 		} else if (mines[x][y]) {
 			return MINE;
