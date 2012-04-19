@@ -1,0 +1,2 @@
+serviceClass: se.danielduner.minesweeper.client.GreetingService
+path: 2A94BAC84039265A430512B8C73ABF2A.gwt.rpc
