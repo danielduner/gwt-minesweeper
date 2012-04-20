@@ -54,15 +54,15 @@
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
 }
 
-.MineBox-mine {
+.MineBox-exploded {
 	background: -moz-linear-gradient(center top , #ED1C24, #AA1317) repeat scroll 0 0 transparent;
 	border: 1px solid #980C10;
 	color: #FADDDE;
 }
-.MineBox-mine:hover {
+.MineBox-exploded:hover {
 	background: -moz-linear-gradient(center top , #C9151B, #A11115) repeat scroll 0 0 transparent;
 }
-.MineBox-mine:active {
+.MineBox-exploded:active {
 	background: -moz-linear-gradient(center top , #AA1317, #ED1C24) repeat scroll 0 0 transparent;
 	color: #DE898C;
 }
@@ -78,6 +78,12 @@
 .MineBox-exposed:active {
 	background: -moz-linear-gradient(center top , #EDEDED, #FFFFFF) repeat scroll 0 0 transparent;
 	color: #999999;
+}
+
+.MineBox-mine {
+}
+
+.MineBox-flagged {
 }
 
 .MineBox-1 {

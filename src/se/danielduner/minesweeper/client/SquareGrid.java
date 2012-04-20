@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 
-public class BoxGrid extends Composite {
+public class SquareGrid extends Composite {
 	private AbsolutePanel absolutePanel;
 	private Grid grid;
 	private MineField mineField;
@@ -15,13 +15,13 @@ public class BoxGrid extends Composite {
 	private Label pointer;
 	private int pointerX = 50, pointerY = 50;
 
-	public BoxGrid(MineField mineField) {
+	public SquareGrid(MineField mineField) {
 		this.mineField = mineField;
 		
 		grid = new Grid(mineField.getWidth(), mineField.getHeight());
 		for(int row=0; row<grid.getRowCount(); row++) {
 			for(int column=0; column<grid.getColumnCount(); column++) {
-				grid.setWidget(row, column, new Box(mineField.getValue(column, row)));
+				grid.setWidget(row, column, new Square(mineField.getValue(column, row)));
 			}
 		}
 		
@@ -53,7 +53,7 @@ public class BoxGrid extends Composite {
 	public void update() {
 		for(int row=0; row<grid.getRowCount(); row++) {
 			for(int column=0; column<grid.getColumnCount(); column++) {
-				((Box)grid.getWidget(row, column)).setType(mineField.getValue(column, row));
+				((Square)grid.getWidget(row, column)).setType(mineField.getValue(column, row));
 			}
 		}
 	}

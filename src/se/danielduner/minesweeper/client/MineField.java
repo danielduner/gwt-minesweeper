@@ -2,18 +2,18 @@ package se.danielduner.minesweeper.client;
 
 import java.util.Random;
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-
 public class MineField {
-	
 	public enum GameStatus {
 		PLAYING, LOST, WON
 	}
-	public static int HIDDEN=-1, MINE=-2, FLAGGED=-3;
+	public static int HIDDEN=-1, EXPLODEDMINE=-2, HIDDENMINE=-3, FLAGGED=-4;
 	private boolean[][] mines;
 	private boolean[][] flagged;
 	private boolean[][] exposed;
-	private int[][] neighbourCount;
+	private boolean[][] exploded;
+	private int[][] mineNeighbourCount;
+	private int[][] hiddenNeighbourCount;
+	private int[][] flaggedNeighbourCount;
 	
 	private int width;
 	private int height;
@@ -29,7 +29,10 @@ public class MineField {
 		mines = new boolean[width][height];
 		flagged = new boolean[width][height];
 		exposed = new boolean[width][height];
-		neighbourCount = new int[width][height];
+		exploded = new boolean[width][height];
+		mineNeighbourCount = new int[width][height];
+		hiddenNeighbourCount = new int[width][height];
+		flaggedNeighbourCount = new int[width][height];
 		
 		int minesPlaced = 0;
 		Random random = new Random();
@@ -44,12 +47,13 @@ public class MineField {
 		
 		for(int y=0; y<height; y++) {
 			for(int x=0; x<width; x++) {
-				if(mines[x][y]){
-					for(int yd=-1; yd<=1; yd++) {
-						for(int xd=-1; xd<=1; xd++) {
-							if (!(yd==0 && xd==0) && y+yd>=0 && y+yd<height && x+xd>=0 && x+xd<width) {
-								neighbourCount[x+xd][y+yd]++;
+				for(int yd=-1; yd<=1; yd++) {
+					for(int xd=-1; xd<=1; xd++) {
+						if (!(yd==0 && xd==0) && y+yd>=0 && y+yd<height && x+xd>=0 && x+xd<width) {
+							if(mines[x][y]){
+								mineNeighbourCount[x+xd][y+yd]++;
 							}
+							hiddenNeighbourCount[x+xd][y+yd]++;
 						}
 					}
 				}
@@ -58,16 +62,16 @@ public class MineField {
 	}
 	
 	public int getValue(int x, int y) {
-		if (gameStatus!=GameStatus.PLAYING && mines[x][y]) {
-			return MINE;
-		} if(flagged[x][y]) {
+		if (exploded[x][y]) {
+			return EXPLODEDMINE;
+		} else if (gameStatus!=GameStatus.PLAYING && mines[x][y]) {
+			return HIDDENMINE;
+		} else if(flagged[x][y]) {
 			return FLAGGED;
-		}if(!exposed[x][y]){
+		} else if(!exposed[x][y]){
 			return HIDDEN;
-		} else if (mines[x][y]) {
-			return MINE;
 		} else {
-			return neighbourCount[x][y];
+			return mineNeighbourCount[x][y];
 		}
 	}
 	
@@ -78,20 +82,28 @@ public class MineField {
 				unflag(x, y);
 			}
 			if (mines[x][y]) {
+				exploded[x][y] = true;
 				gameStatus = GameStatus.LOST;
 			}
-			if (!mines[x][y] && neighbourCount[x][y]==0) {
-				for(int yd=-1; yd<=1; yd++) {
-					for(int xd=-1; xd<=1; xd++) {
-						if (y+yd>=0 && y+yd<height && x+xd>=0 && x+xd<width && !exposed[x+xd][y+yd]) {
-							expose(x+xd, y+yd);
+			if (!mines[x][y] && mineNeighbourCount[x][y]==0) {
+				for(int yd=y-1; yd<=y+1; yd++) {
+					for(int xd=x-1; xd<=x+1; xd++) {
+						if (!(yd==y && xd==x) && yd>=0 && yd<height && xd>=0 && xd<width) {
+							expose(xd, yd);
 						}
 					}
 				}
 			}
-			exposedCount ++;
+			exposedCount++;
 			if (width*height-exposedCount == mineCount && gameStatus==GameStatus.PLAYING) {
 				gameStatus = GameStatus.WON;
+			}
+			for(int yd=y-1; yd<=y+1; yd++) {
+				for(int xd=x-1; xd<=x+1; xd++) {
+					if (!(yd==y && xd==x) && yd>=0 && yd<height && xd>=0 && xd<width) {
+						hiddenNeighbourCount[xd][yd]--;
+					}
+				}
 			}
 		}
 	}
@@ -99,6 +111,13 @@ public class MineField {
 	public void flag(int x, int y) {
 		if(!exposed[x][y]){
 			flagged[x][y] = true;
+			for(int yd=-1; yd<=1; yd++) {
+				for(int xd=-1; xd<=1; xd++) {
+					if (!(yd==0 && xd==0) && y+yd>=0 && y+yd<height && x+xd>=0 && x+xd<width) {
+						flaggedNeighbourCount[x+xd][y+yd]++;
+					}
+				}
+			}
 		}
 	}
 	
@@ -122,5 +141,13 @@ public class MineField {
 	
 	public GameStatus getGameStatus() {
 		return gameStatus; 
+	}
+	
+	public int getHiddenNeighbours(int x, int y){
+		return hiddenNeighbourCount[x][y];
+	}
+	
+	public int getFlaggedNeighbours(int x, int y){
+		return flaggedNeighbourCount[x][y];
 	}
 }
