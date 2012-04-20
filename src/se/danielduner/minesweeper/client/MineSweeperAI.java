@@ -37,6 +37,6 @@ public class MineSweeperAI implements EntryPoint {
 				}
 			}
 		};
-		timer.scheduleRepeating(1000);
+		timer.scheduleRepeating(1);
 	}
 }

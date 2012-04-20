@@ -55,32 +55,61 @@
 }
 
 .MineBox-exploded {
+	background: -webkit-gradient(linear, left top, left bottom, from(#ED1C24), to(#AA1317));
 	background: -moz-linear-gradient(center top , #ED1C24, #AA1317) repeat scroll 0 0 transparent;
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ED1C24', endColorstr='#AA1317');
 	border: 1px solid #980C10;
 	color: #FADDDE;
 }
 .MineBox-exploded:hover {
+	background: -webkit-gradient(linear, left top, left bottom, from(#C9151B), to(#A11115));
 	background: -moz-linear-gradient(center top , #C9151B, #A11115) repeat scroll 0 0 transparent;
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#C9151B', endColorstr='#A11115');
+	
 }
 .MineBox-exploded:active {
+	background: -webkit-gradient(linear, left top, left bottom, from(#AA1317), to(#ED1C24));
 	background: -moz-linear-gradient(center top , #AA1317, #ED1C24) repeat scroll 0 0 transparent;
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#AA1317', endColorstr='#ED1C24');
 	color: #DE898C;
 }
 
 .MineBox-exposed {
+	background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#EDEDED));
 	background: -moz-linear-gradient(center top , #FFFFFF, #EDEDED) repeat scroll 0 0 transparent;
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#EDEDED');
 	border: 1px solid #B7B7B7;
 	color: #606060;
 }
 .MineBox-exposed:hover {
+	background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#DCDCDC));
 	background: -moz-linear-gradient(center top , #FFFFFF, #DCDCDC) repeat scroll 0 0 transparent;
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DCDCDC');
 }
 .MineBox-exposed:active {
+	background: -webkit-gradient(linear, left top, left bottom, from(#EDEDED), to(#FFFFFF));
 	background: -moz-linear-gradient(center top , #EDEDED, #FFFFFF) repeat scroll 0 0 transparent;
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#EDEDED', endColorstr='#FFFFFF');
 	color: #999999;
 }
 
-.MineBox-mine {
+.MineBox-found {
+	background: -webkit-gradient(linear, left top, left bottom, from(#7DB72F), to(#4E7D0E));
+	background: -moz-linear-gradient(center top , #7DB72F, #4E7D0E) repeat scroll 0 0 transparent;
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#7DB72F', endColorstr='#4E7D0E');
+	border: 1px solid #B7B7B7;
+	color: #606060;
+}
+.MineBox-found:hover {
+	background: -webkit-gradient(linear, left top, left bottom, from(#6B9D28), to(#7DB72F));
+	background: -moz-linear-gradient(center top , #6B9D28, #7DB72F) repeat scroll 0 0 transparent;
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#6B9D28', endColorstr='#7DB72F');
+}
+.MineBox-found:active {
+	background: -webkit-gradient(linear, left top, left bottom, from(#4E7D0E), to(#7DB72F));
+	background: -moz-linear-gradient(center top , #4E7D0E, #7DB72F) repeat scroll 0 0 transparent;
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#4E7D0E', endColorstr='#7DB72F');
+	color: #999999;
 }
 
 .MineBox-flagged {

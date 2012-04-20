@@ -6,7 +6,7 @@ public class MineField {
 	public enum GameStatus {
 		PLAYING, LOST, WON
 	}
-	public static int HIDDEN=-1, EXPLODEDMINE=-2, HIDDENMINE=-3, FLAGGED=-4;
+	public static int HIDDEN=-1, EXPLODEDMINE=-2, HIDDENMINE=-3, FOUNDMINE=-4, FLAGGED=-5;
 	private boolean[][] mines;
 	private boolean[][] flagged;
 	private boolean[][] exposed;
@@ -65,7 +65,11 @@ public class MineField {
 		if (exploded[x][y]) {
 			return EXPLODEDMINE;
 		} else if (gameStatus!=GameStatus.PLAYING && mines[x][y]) {
-			return HIDDENMINE;
+			if (flagged[x][y]) {
+				return FOUNDMINE;
+			} else {
+				return HIDDENMINE;
+			}
 		} else if(flagged[x][y]) {
 			return FLAGGED;
 		} else if(!exposed[x][y]){

@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.Label;
 public class Square extends Composite {
 	private static Images images = GWT.create(Images.class);
 	
-	private int value;
+	private int value = Integer.MIN_VALUE;
 	private AbsolutePanel absolutePanel = new AbsolutePanel();
 	private Label button;
 	private Image image = new Image();
@@ -38,18 +38,19 @@ public class Square extends Composite {
 		} else if (value == MineField.FLAGGED) {
 			button.setText("");
 			setImage(new Image(images.flagImage()));
-			button.setStyleDependentName("hidden", true);
 			button.setStyleDependentName("flagged", true);
 		} else if (value == MineField.EXPLODEDMINE) {
 			button.setText("");
 			setImage(new Image(images.bangImage()));
-			button.setStyleDependentName("mine", true);
 			button.setStyleDependentName("exploded", true);
 		} else if (value == MineField.HIDDENMINE) {
 			button.setText("");
 			setImage(new Image(images.mineImage()));
-			button.setStyleDependentName("mine", true);
-			button.setStyleDependentName("exploded", true);
+			button.setStyleDependentName("hidden", true);
+		} else if (value == MineField.FOUNDMINE) {
+			button.setText("");
+			setImage(new Image(images.mineImage()));
+			button.setStyleDependentName("found", true);
 		} else if (value==0){
 			button.setText("");
 			setImage(new Image());
