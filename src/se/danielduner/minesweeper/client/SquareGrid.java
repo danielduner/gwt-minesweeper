@@ -2,6 +2,9 @@ package se.danielduner.minesweeper.client;
 
 import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
+import com.google.gwt.event.dom.client.ContextMenuEvent;
+import com.google.gwt.event.dom.client.ContextMenuHandler;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
@@ -15,24 +18,31 @@ public class SquareGrid extends Composite {
 	private Label pointer;
 	private int pointerX = 50, pointerY = 50;
 
-	public SquareGrid(MineField mineField) {
+	public SquareGrid(EventBus eventBus, MineField mineField) {
 		this.mineField = mineField;
 		
 		grid = new Grid(mineField.getWidth(), mineField.getHeight());
 		for(int row=0; row<grid.getRowCount(); row++) {
 			for(int column=0; column<grid.getColumnCount(); column++) {
-				grid.setWidget(row, column, new Square(mineField.getValue(column, row)));
+				grid.setWidget(row, column, new Square(eventBus, column, row, mineField.getValue(column, row)));
 			}
 		}
 		
 		pointer = new Label("<-");
 		
 		absolutePanel = new AbsolutePanel();
-		absolutePanel.setSize((mineField.getWidth()*50)+"px", (mineField.getWidth()*50)+"px");
+		absolutePanel.setSize((mineField.getWidth()*36)+"px", (mineField.getWidth()*36)+"px");
 		absolutePanel.add(grid, 0, 0);
 		absolutePanel.add(pointer, pointerX, pointerY);
 		
 		initWidget(absolutePanel);
+		
+		this.addDomHandler(new ContextMenuHandler() {
+			@Override public void onContextMenu(ContextMenuEvent event) {
+				event.preventDefault();
+				event.stopPropagation();
+			}
+		}, ContextMenuEvent.getType());
 	}
 	
 	public void movePointer(final int x, final int y) {

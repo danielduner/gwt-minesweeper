@@ -6,7 +6,7 @@ public class MineField {
 	public enum GameStatus {
 		PLAYING, LOST, WON
 	}
-	public static int HIDDEN=-1, EXPLODEDMINE=-2, HIDDENMINE=-3, FOUNDMINE=-4, FLAGGED=-5;
+	public static final int HIDDEN=-1, EXPLODEDMINE=-2, HIDDENMINE=-3, FLAGGEDMINE=-4, FLAGGED=-5, FLAGGEDBAD=-6;
 	private boolean[][] mines;
 	private boolean[][] flagged;
 	private boolean[][] exposed;
@@ -62,46 +62,46 @@ public class MineField {
 	}
 	
 	public int getValue(int x, int y) {
-		if (exploded[x][y]) {
+		if (exploded[x][y])
 			return EXPLODEDMINE;
-		} else if (gameStatus!=GameStatus.PLAYING && mines[x][y]) {
-			if (flagged[x][y]) {
-				return FOUNDMINE;
-			} else {
+		if (gameStatus!=GameStatus.PLAYING) {
+			if (mines[x][y] && flagged[x][y])
+				return FLAGGEDMINE;
+			if (!mines[x][y] && flagged[x][y])
+				return FLAGGEDBAD;
+			if (mines[x][y])
 				return HIDDENMINE;
-			}
-		} else if(flagged[x][y]) {
-			return FLAGGED;
-		} else if(!exposed[x][y]){
-			return HIDDEN;
-		} else {
-			return mineNeighbourCount[x][y];
 		}
+		if(flagged[x][y])
+			return FLAGGED;
+		if(!exposed[x][y])
+			return HIDDEN;
+		return mineNeighbourCount[x][y];
 	}
 	
-	public void expose(int x, int y){
-		if(!exposed[x][y]){
-			exposed[x][y] = true;
-			if (flagged[x][y]) {
-				unflag(x, y);
-			}
-			if (mines[x][y]) {
-				exploded[x][y] = true;
-				gameStatus = GameStatus.LOST;
-			}
-			if (!mines[x][y] && mineNeighbourCount[x][y]==0) {
+	public void leftclick(int x, int y) {
+		if (gameStatus != GameStatus.PLAYING)
+			return;
+		if (flagged[x][y]) {
+			unflag(x, y);
+			return;
+		}
+		
+		if (exposed[x][y]) {
+			if (getValue(x, y) == flaggedNeighbourCount[x][y]) {
 				for(int yd=y-1; yd<=y+1; yd++) {
 					for(int xd=x-1; xd<=x+1; xd++) {
-						if (!(yd==y && xd==x) && yd>=0 && yd<height && xd>=0 && xd<width) {
-							expose(xd, yd);
+						if (!(yd==y && xd==x) && yd>=0 && yd<height && xd>=0 && xd<width
+								&& getValue(xd, yd)==HIDDEN) {
+							leftclick(xd, yd);
 						}
 					}
 				}
 			}
+			
+		} else {
+			exposed[x][y] = true;
 			exposedCount++;
-			if (width*height-exposedCount == mineCount && gameStatus==GameStatus.PLAYING) {
-				gameStatus = GameStatus.WON;
-			}
 			for(int yd=y-1; yd<=y+1; yd++) {
 				for(int xd=x-1; xd<=x+1; xd++) {
 					if (!(yd==y && xd==x) && yd>=0 && yd<height && xd>=0 && xd<width) {
@@ -109,11 +109,40 @@ public class MineField {
 					}
 				}
 			}
+			
+			if (mines[x][y]) {
+				exploded[x][y] = true;
+				gameStatus = GameStatus.LOST;
+				return;
+			}
+			if (mineNeighbourCount[x][y]==0) {
+				for(int yd=y-1; yd<=y+1; yd++) {
+					for(int xd=x-1; xd<=x+1; xd++) {
+						if (!(yd==y && xd==x) && yd>=0 && yd<height && xd>=0 && xd<width) {
+							leftclick(xd, yd);
+						}
+					}
+				}
+			}
+			if (width*height-exposedCount == mineCount) {
+				gameStatus = GameStatus.WON;
+			}
 		}
 	}
 	
-	public void flag(int x, int y) {
-		if(!exposed[x][y]){
+	public void rightclick(int x, int y) {
+		if (gameStatus!=GameStatus.PLAYING || exposed[x][y]) {
+			return;
+		}
+		if (!flagged[x][y]) {
+			flag(x, y);
+		} else {
+			unflag(x, y);
+		}
+	}
+	
+	private void flag(int x, int y) {
+		if(!flagged[x][y]) {
 			flagged[x][y] = true;
 			for(int yd=-1; yd<=1; yd++) {
 				for(int xd=-1; xd<=1; xd++) {
@@ -125,9 +154,16 @@ public class MineField {
 		}
 	}
 	
-	public void unflag(int x, int y) {
-		if(!flagged[x][y]){
+	private void unflag(int x, int y) {
+		if(flagged[x][y]){
 			flagged[x][y] = false;
+			for(int yd=-1; yd<=1; yd++) {
+				for(int xd=-1; xd<=1; xd++) {
+					if (!(yd==0 && xd==0) && y+yd>=0 && y+yd<height && x+xd>=0 && x+xd<width) {
+						flaggedNeighbourCount[x+xd][y+yd]--;
+					}
+				}
+			}
 		}
 	}
 	

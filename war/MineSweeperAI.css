@@ -21,6 +21,13 @@
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
 	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
 	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .MineBox:hover {
@@ -34,7 +41,6 @@
 
 
 .MineBox-hidden {
-	color: #fef4e9;
 	border: solid 1px #da7c0c;
 	background: #f78d1d;
 	background: -webkit-gradient(linear, left top, left bottom, from(#faa51a), to(#f47a20));
@@ -48,30 +54,27 @@
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015');
 }
 .MineBox-hidden:active {
-	color: #fcd3a5;
 	background: -webkit-gradient(linear, left top, left bottom, from(#f47a20), to(#faa51a));
 	background: -moz-linear-gradient(top,  #f47a20,  #faa51a);
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
 }
 
-.MineBox-exploded {
+.MineBox-error {
 	background: -webkit-gradient(linear, left top, left bottom, from(#ED1C24), to(#AA1317));
 	background: -moz-linear-gradient(center top , #ED1C24, #AA1317) repeat scroll 0 0 transparent;
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ED1C24', endColorstr='#AA1317');
 	border: 1px solid #980C10;
-	color: #FADDDE;
 }
-.MineBox-exploded:hover {
+.MineBox-error:hover {
 	background: -webkit-gradient(linear, left top, left bottom, from(#C9151B), to(#A11115));
 	background: -moz-linear-gradient(center top , #C9151B, #A11115) repeat scroll 0 0 transparent;
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#C9151B', endColorstr='#A11115');
 	
 }
-.MineBox-exploded:active {
+.MineBox-error:active {
 	background: -webkit-gradient(linear, left top, left bottom, from(#AA1317), to(#ED1C24));
 	background: -moz-linear-gradient(center top , #AA1317, #ED1C24) repeat scroll 0 0 transparent;
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#AA1317', endColorstr='#ED1C24');
-	color: #DE898C;
 }
 
 .MineBox-exposed {
@@ -139,3 +142,14 @@
 .MineBox-8 {
 	color: magenta;
 }
+
+.MineBox-image {
+	pointer-events: none;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
