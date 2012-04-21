@@ -4,7 +4,6 @@ import se.danielduner.minesweeper.client.event.SquareClickEvent;
 import se.danielduner.minesweeper.client.event.SquareClickEvent.SquareClickType;
 import se.danielduner.minesweeper.client.resources.Images;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -19,7 +18,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 public class Square extends Composite {
-	private static Images images = GWT.create(Images.class);
+	private Images images;
 	private int value = Integer.MIN_VALUE;
 	private AbsolutePanel absolutePanel = new AbsolutePanel();
 	private Label button;
@@ -27,7 +26,8 @@ public class Square extends Composite {
 	private Image image = emptyImage;
 	
 	
-	public Square(final EventBus eventBus, final int x, final int y, int value) {
+	public Square(final EventBus eventBus, Images images, final int x, final int y, int value) {
+		this.images = images;
 		absolutePanel.setSize("32px", "32px");
 		initWidget(absolutePanel);
 		button = new Label();
@@ -84,6 +84,7 @@ public class Square extends Composite {
 		case MineField.EXPLODEDMINE:
 			setImage(new Image(images.bangImage()));
 			button.setStyleDependentName("error", true);
+			System.out.println("here");
 			break;
 		case MineField.HIDDENMINE:
 			setImage(new Image(images.mineImage()));

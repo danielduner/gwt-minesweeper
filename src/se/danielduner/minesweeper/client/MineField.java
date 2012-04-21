@@ -2,11 +2,19 @@ package se.danielduner.minesweeper.client;
 
 import java.util.Random;
 
+import se.danielduner.minesweeper.client.event.SquareClickEvent;
+import se.danielduner.minesweeper.client.event.SquareClickEvent.SquareClickType;
+import se.danielduner.minesweeper.client.event.SquareUpdateEvent;
+
+import com.google.gwt.event.shared.EventBus;
+
 public class MineField {
 	public enum GameStatus {
 		PLAYING, LOST, WON
 	}
 	public static final int HIDDEN=-1, EXPLODEDMINE=-2, HIDDENMINE=-3, FLAGGEDMINE=-4, FLAGGED=-5, FLAGGEDBAD=-6;
+	
+	private EventBus eventBus;
 	private boolean[][] mines;
 	private boolean[][] flagged;
 	private boolean[][] exposed;
@@ -22,7 +30,8 @@ public class MineField {
 	
 	private GameStatus gameStatus = GameStatus.PLAYING;
 	
-	public MineField(int width, int height, int mineCount) {
+	public MineField(EventBus eventBus, int width, int height, int mineCount) {
+		this.eventBus = eventBus;
 		this.width = width;
 		this.height = height;
 		this.mineCount = mineCount;
@@ -88,20 +97,20 @@ public class MineField {
 		}
 		
 		if (exposed[x][y]) {
-			if (getValue(x, y) == flaggedNeighbourCount[x][y]) {
+			if (getValue(x, y) <= flaggedNeighbourCount[x][y]) {
 				for(int yd=y-1; yd<=y+1; yd++) {
 					for(int xd=x-1; xd<=x+1; xd++) {
 						if (!(yd==y && xd==x) && yd>=0 && yd<height && xd>=0 && xd<width
 								&& getValue(xd, yd)==HIDDEN) {
-							leftclick(xd, yd);
+							eventBus.fireEvent(new SquareClickEvent(SquareClickType.LEFTCLICK, xd, yd));
 						}
 					}
 				}
 			}
-			
 		} else {
 			exposed[x][y] = true;
 			exposedCount++;
+			
 			for(int yd=y-1; yd<=y+1; yd++) {
 				for(int xd=x-1; xd<=x+1; xd++) {
 					if (!(yd==y && xd==x) && yd>=0 && yd<height && xd>=0 && xd<width) {
@@ -113,17 +122,29 @@ public class MineField {
 			if (mines[x][y]) {
 				exploded[x][y] = true;
 				gameStatus = GameStatus.LOST;
+				eventBus.fireEvent(new SquareUpdateEvent(x, y));
+				for (int xd=0; xd<width; xd++){
+					for (int yd=0; yd<width; yd++){
+						if(mines[xd][yd] || flagged[xd][yd]) {
+							eventBus.fireEvent(new SquareUpdateEvent(xd, yd));
+						}
+					}
+				}
 				return;
 			}
+			
+			eventBus.fireEvent(new SquareUpdateEvent(x, y));
+			
 			if (mineNeighbourCount[x][y]==0) {
 				for(int yd=y-1; yd<=y+1; yd++) {
 					for(int xd=x-1; xd<=x+1; xd++) {
-						if (!(yd==y && xd==x) && yd>=0 && yd<height && xd>=0 && xd<width) {
-							leftclick(xd, yd);
+						if (!(yd==y && xd==x) && yd>=0 && yd<height && xd>=0 && xd<width && getValue(xd, yd)==HIDDEN) {
+							eventBus.fireEvent(new SquareClickEvent(SquareClickType.LEFTCLICK, xd, yd));
 						}
 					}
 				}
 			}
+			
 			if (width*height-exposedCount == mineCount) {
 				gameStatus = GameStatus.WON;
 			}
@@ -151,6 +172,7 @@ public class MineField {
 					}
 				}
 			}
+			eventBus.fireEvent(new SquareUpdateEvent(x, y));
 		}
 	}
 	
@@ -164,6 +186,7 @@ public class MineField {
 					}
 				}
 			}
+			eventBus.fireEvent(new SquareUpdateEvent(x, y));
 		}
 	}
 	

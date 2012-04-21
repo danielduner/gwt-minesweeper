@@ -15,5 +15,7 @@ public interface Images extends ClientBundle {
 	@Source("bang.png")
 	public ImageResource bangImage();
 	
+	@Source("arrow.png")
+	public ImageResource arrowImage();
 	
 }
