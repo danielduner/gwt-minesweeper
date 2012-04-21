@@ -84,7 +84,6 @@ public class Square extends Composite {
 		case MineField.EXPLODEDMINE:
 			setImage(new Image(images.bangImage()));
 			button.setStyleDependentName("error", true);
-			System.out.println("here");
 			break;
 		case MineField.HIDDENMINE:
 			setImage(new Image(images.mineImage()));
