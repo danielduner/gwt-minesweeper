@@ -35,11 +35,17 @@ public class AIButton extends Composite implements ClickHandler {
 	public void leftclick() {
 		switch (aiMode) {
 		case ON:
+			aiMode = AIMode.OFF;
 			eventBus.fireEvent(new AIModeEvent(AIMode.OFF));
 			break;
 		case OFF:
-			eventBus.fireEvent(new AIModeEvent(AIMode.OFF));
+			aiMode = AIMode.ON;
+			eventBus.fireEvent(new AIModeEvent(AIMode.ON));
 			break;
 		}
+	}
+	
+	public AIMode getAIMode() {
+		return aiMode;
 	}
 }

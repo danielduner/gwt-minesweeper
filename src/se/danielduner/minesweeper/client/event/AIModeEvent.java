@@ -29,7 +29,7 @@ public class AIModeEvent extends Event<AIModeHandler> {
 		return eventBus.addHandler(TYPE, aiModeHandler);
 	}
 
-	public AIMode aiStatus() {
+	public AIMode getAIStatus() {
 		return aiMode;
 	}
 }

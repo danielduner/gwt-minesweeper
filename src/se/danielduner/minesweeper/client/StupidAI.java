@@ -32,7 +32,7 @@ public class StupidAI {
 									&& field.getValue(xd, yd)==MineField.HIDDEN) {
 								nextX = xd;
 								nextY = yd;
-								clickType = ClickType.LEFTCLICK;
+								clickType = ClickType.RIGHTCLICK;
 								return;
 							}
 						}
@@ -44,7 +44,7 @@ public class StupidAI {
 									&& xd<width && field.getValue(xd, yd)==MineField.HIDDEN) {
 								nextX = xd;
 								nextY = yd;
-								clickType = ClickType.RIGHTCLICK;
+								clickType = ClickType.LEFTCLICK;
 								return;
 							}
 						}

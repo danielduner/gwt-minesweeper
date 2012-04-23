@@ -2,6 +2,9 @@ package se.danielduner.minesweeper.client;
 
 import se.danielduner.minesweeper.client.AIPointer.MoveCallback;
 import se.danielduner.minesweeper.client.MineSweeperAI.GameStatus;
+import se.danielduner.minesweeper.client.event.AIModeEvent;
+import se.danielduner.minesweeper.client.event.AIModeEvent.AIMode;
+import se.danielduner.minesweeper.client.event.AIModeHandler;
 import se.danielduner.minesweeper.client.event.GameStatusEvent;
 import se.danielduner.minesweeper.client.event.GameStatusHandler;
 import se.danielduner.minesweeper.client.event.SquareClickEvent;
@@ -15,12 +18,14 @@ import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
 import com.google.gwt.event.dom.client.ContextMenuHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Widget;
 
-public class PlayingField extends Composite implements AnimationCallback, SquareClickHandler, SquareUpdateHandler, GameStatusHandler {
+public class PlayingField extends Composite
+implements AnimationCallback, SquareClickHandler, SquareUpdateHandler, GameStatusHandler, AIModeHandler {
 	
 	public enum ClickType {
 		LEFTCLICK, RIGHTCLICK
@@ -34,6 +39,7 @@ public class PlayingField extends Composite implements AnimationCallback, Square
 	private MineField mineField;
 	private StupidAI ai;
 	private AIPointer aiPointer;
+	private int aiPointerParkingX=262, aiPointerParkingY=64;
 	private AIButton aiButton;
 	private boolean isAnimating;
 	
@@ -49,7 +55,7 @@ public class PlayingField extends Composite implements AnimationCallback, Square
 		makeNewGame(16, 16, 40);
 		initWidget(absolutePanel);
 		
-		aiPointer = new AIPointer(images, 262, 64);
+		aiPointer = new AIPointer(images, aiPointerParkingX, aiPointerParkingY);
 		absolutePanel.add(aiPointer, aiPointer.getX(), aiPointer.getY());
 		
 		this.addDomHandler(new ContextMenuHandler() {
@@ -62,6 +68,7 @@ public class PlayingField extends Composite implements AnimationCallback, Square
 		SquareClickEvent.register(eventBus, this);
 		SquareUpdateEvent.register(eventBus, this);
 		GameStatusEvent.register(eventBus, this);
+		AIModeEvent.register(eventBus, this);
 	}
 	
 	@Override
@@ -114,10 +121,10 @@ public class PlayingField extends Composite implements AnimationCallback, Square
 		absolutePanel.setWidgetPosition(aiButton, pixelWidth/2-35, 60);
 	}
 	
-	public void doAIMove() {
-	}
-	
 	public void clickGridButton(final int x, final int y, final ClickType clickType) {
+		if (aiButton.getAIMode()==AIMode.OFF){
+			return;
+		}
 		Widget square = grid.getWidget(y, x);
 		int xpixel = square.getAbsoluteLeft();
 		int ypixel = square.getAbsoluteTop();
@@ -125,6 +132,7 @@ public class PlayingField extends Composite implements AnimationCallback, Square
 			@Override
 			public void onMoveComplete() {
 				mineField.click(x, y, clickType);
+				aiDoNext();
 			}
 		});
 		isAnimating = true;
@@ -132,12 +140,27 @@ public class PlayingField extends Composite implements AnimationCallback, Square
 	}
 	
 	public void clickRestartButton() {
+		if (aiButton.getAIMode()==AIMode.OFF){
+			return;
+		}
 		int xpixel = restartButton.getAbsoluteLeft() + restartButton.getOffsetWidth()/2;
 		int ypixel = restartButton.getAbsoluteTop() + restartButton.getOffsetHeight()/2;
 		aiPointer.movePointer(xpixel, ypixel, new MoveCallback() {
 			@Override
 			public void onMoveComplete() {
 				restartButton.leftclick();
+				aiDoNext();
+			}
+		});
+		isAnimating = true;
+		requestAnimationFrame();
+	}
+	
+	public void parkAIPointer() {
+		aiPointer.movePointer(aiPointerParkingX, aiPointerParkingY, new MoveCallback() {
+			@Override
+			public void onMoveComplete() {
+				// Do nothing
 			}
 		});
 		isAnimating = true;
@@ -160,6 +183,35 @@ public class PlayingField extends Composite implements AnimationCallback, Square
 					requestAnimationFrame();
 				}
 			}
+		}
+	}
+
+	@Override
+	public void onAIModeUpdate(AIModeEvent event) {
+		switch (event.getAIStatus()) {
+		case ON:
+			aiDoNext();
+			break;
+		case OFF:
+			parkAIPointer();
+			break;
+		}
+	}
+	
+	public void aiDoNext() {
+		if (aiButton.getAIMode() == AIMode.ON) {
+			Timer t = new Timer() {
+				@Override
+				public void run() {
+					ai.updateSuggestion();
+					if (mineField.getGameStatus()==GameStatus.PLAYING) {
+						clickGridButton(ai.getX(), ai.getY(), ai.getClickType());
+					} else {
+						clickRestartButton();
+					}
+				}
+			};
+			t.schedule(300);
 		}
 	}
 	

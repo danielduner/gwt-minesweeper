@@ -42,7 +42,7 @@ public class AIPointer extends Composite {
 		} else {
 			double timediff = timestamp - lastTimestamp;
 			if (timediff>0) {
-				double speed = 0.5 * timediff;
+				double speed = 0.3 * timediff;
 				if (speed > 10) {
 					speed = 10;
 				}
