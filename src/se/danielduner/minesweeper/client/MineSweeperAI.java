@@ -2,7 +2,6 @@ package se.danielduner.minesweeper.client;
 
 import java.util.Random;
 
-import se.danielduner.minesweeper.client.PlayingField.ClickType;
 import se.danielduner.minesweeper.client.resources.Images;
 
 import com.google.gwt.core.client.EntryPoint;
