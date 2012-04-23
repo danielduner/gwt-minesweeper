@@ -2,17 +2,20 @@ package se.danielduner.minesweeper.client;
 
 import java.util.Random;
 
-import se.danielduner.minesweeper.client.MineField.GameStatus;
+import se.danielduner.minesweeper.client.MineSweeperAI.GameStatus;
+import se.danielduner.minesweeper.client.PlayingField.ClickType;
 
 public class StupidAI {
 	private MineField field;
 	private Random random = new Random();
+	private int nextX=-1, nextY=-1;
+	private ClickType clickType = null;
 	
 	public StupidAI(MineField minefield) {
 		field = minefield;
 	}
 		
-	public void act() {
+	public void updateSuggestion() {
 		if (field.getGameStatus()!=GameStatus.PLAYING) {
 			return;
 		}
@@ -27,7 +30,9 @@ public class StupidAI {
 						for(int xd=x-1; xd<=x+1; xd++) {
 							if (!(yd==x && xd==y) && yd>=0 && yd<height && xd>=0 && xd<width
 									&& field.getValue(xd, yd)==MineField.HIDDEN) {
-								field.rightclick(xd, yd);
+								nextX = xd;
+								nextY = yd;
+								clickType = ClickType.LEFTCLICK;
 								return;
 							}
 						}
@@ -37,7 +42,9 @@ public class StupidAI {
 						for(int xd=x-1; xd<=x+1; xd++) {
 							if (!(yd==x && xd==y) && yd>=0 && yd<height && xd>=0
 									&& xd<width && field.getValue(xd, yd)==MineField.HIDDEN) {
-								field.leftclick(xd, yd);
+								nextX = xd;
+								nextY = yd;
+								clickType = ClickType.RIGHTCLICK;
 								return;
 							}
 						}
@@ -50,9 +57,23 @@ public class StupidAI {
 			int x = random.nextInt(field.getWidth());
 			int y = random.nextInt(field.getHeight());
 			if (field.getValue(x, y)==MineField.HIDDEN) {
-				field.leftclick(x, y);
+				nextX = x;
+				nextY = y;
+				clickType = ClickType.LEFTCLICK;
 				return;
 			}
 		}
+	}
+	
+	public int getX() {
+		return nextX;
+	}
+	
+	public int getY() {
+		return nextY;
+	}
+	
+	public ClickType getClickType() {
+		return clickType;
 	}
 }

@@ -1,18 +1,16 @@
 package se.danielduner.minesweeper.client.event;
 
+import se.danielduner.minesweeper.client.PlayingField.ClickType;
+
 import com.google.web.bindery.event.shared.Event;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class SquareClickEvent extends Event<SquareClickHandler> {
 	public static final Type<SquareClickHandler> TYPE = new Type<SquareClickHandler>();
-	public enum SquareClickType {
-		LEFTCLICK, RIGHTCLICK
-	}
-
-	private SquareClickType clickType;
+	private ClickType clickType;
 	private int x, y;
-	public SquareClickEvent(SquareClickType clickType, int x, int y) {
+	public SquareClickEvent(ClickType clickType, int x, int y) {
 		this.clickType = clickType;
 		this.x = x;
 		this.y = y;
@@ -32,7 +30,7 @@ public class SquareClickEvent extends Event<SquareClickHandler> {
 		return eventBus.addHandler(TYPE, squareClickHandler);
 	}
 
-	public SquareClickType getClickType() {
+	public ClickType getClickType() {
 		return clickType;
 	}
 

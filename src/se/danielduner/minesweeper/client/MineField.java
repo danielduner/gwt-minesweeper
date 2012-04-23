@@ -2,23 +2,22 @@ package se.danielduner.minesweeper.client;
 
 import java.util.Random;
 
+import se.danielduner.minesweeper.client.MineSweeperAI.GameStatus;
+import se.danielduner.minesweeper.client.PlayingField.ClickType;
+import se.danielduner.minesweeper.client.event.GameStatusEvent;
 import se.danielduner.minesweeper.client.event.SquareClickEvent;
-import se.danielduner.minesweeper.client.event.SquareClickEvent.SquareClickType;
 import se.danielduner.minesweeper.client.event.SquareUpdateEvent;
 
 import com.google.gwt.event.shared.EventBus;
 
 public class MineField {
-	public enum GameStatus {
-		PLAYING, LOST, WON
-	}
 	public static final int HIDDEN=-1, EXPLODEDMINE=-2, HIDDENMINE=-3, FLAGGEDMINE=-4, FLAGGED=-5, FLAGGEDBAD=-6;
 	
 	private EventBus eventBus;
 	private boolean[][] mines;
 	private boolean[][] flagged;
 	private boolean[][] exposed;
-	private boolean[][] exploded;
+	private int explodedX = -1, explodedY = -1;
 	private int[][] mineNeighbourCount;
 	private int[][] hiddenNeighbourCount;
 	private int[][] flaggedNeighbourCount;
@@ -28,7 +27,7 @@ public class MineField {
 	private int mineCount;
 	private int exposedCount = 0;
 	
-	private GameStatus gameStatus = GameStatus.PLAYING;
+	private GameStatus gameStatus;
 	
 	public MineField(EventBus eventBus, int width, int height, int mineCount) {
 		this.eventBus = eventBus;
@@ -38,7 +37,6 @@ public class MineField {
 		mines = new boolean[width][height];
 		flagged = new boolean[width][height];
 		exposed = new boolean[width][height];
-		exploded = new boolean[width][height];
 		mineNeighbourCount = new int[width][height];
 		hiddenNeighbourCount = new int[width][height];
 		flaggedNeighbourCount = new int[width][height];
@@ -68,10 +66,12 @@ public class MineField {
 				}
 			}
 		}
+		
+		setGameStatus(GameStatus.PLAYING);
 	}
 	
 	public int getValue(int x, int y) {
-		if (exploded[x][y])
+		if (explodedX == x && explodedY == y)
 			return EXPLODEDMINE;
 		if (gameStatus!=GameStatus.PLAYING) {
 			if (mines[x][y] && flagged[x][y])
@@ -88,7 +88,18 @@ public class MineField {
 		return mineNeighbourCount[x][y];
 	}
 	
-	public void leftclick(int x, int y) {
+	public void click(int x, int y, ClickType clickType) {
+		switch (clickType) {
+		case LEFTCLICK:
+			leftclick(x, y);
+			break;
+		case RIGHTCLICK:
+			rightclick(x, y);
+			break;
+		}
+	}
+	
+	private void leftclick(int x, int y) {
 		if (gameStatus != GameStatus.PLAYING)
 			return;
 		if (flagged[x][y]) {
@@ -102,7 +113,7 @@ public class MineField {
 					for(int xd=x-1; xd<=x+1; xd++) {
 						if (!(yd==y && xd==x) && yd>=0 && yd<height && xd>=0 && xd<width
 								&& getValue(xd, yd)==HIDDEN) {
-							eventBus.fireEvent(new SquareClickEvent(SquareClickType.LEFTCLICK, xd, yd));
+							eventBus.fireEvent(new SquareClickEvent(ClickType.LEFTCLICK, xd, yd));
 						}
 					}
 				}
@@ -120,16 +131,9 @@ public class MineField {
 			}
 			
 			if (mines[x][y]) {
-				exploded[x][y] = true;
-				gameStatus = GameStatus.LOST;
-				eventBus.fireEvent(new SquareUpdateEvent(x, y));
-				for (int xd=0; xd<width; xd++){
-					for (int yd=0; yd<width; yd++){
-						if(mines[xd][yd] || flagged[xd][yd]) {
-							eventBus.fireEvent(new SquareUpdateEvent(xd, yd));
-						}
-					}
-				}
+				explodedX = x;
+				explodedY = y;
+				setGameStatus(GameStatus.LOST);
 				return;
 			}
 			
@@ -139,19 +143,19 @@ public class MineField {
 				for(int yd=y-1; yd<=y+1; yd++) {
 					for(int xd=x-1; xd<=x+1; xd++) {
 						if (!(yd==y && xd==x) && yd>=0 && yd<height && xd>=0 && xd<width && getValue(xd, yd)==HIDDEN) {
-							eventBus.fireEvent(new SquareClickEvent(SquareClickType.LEFTCLICK, xd, yd));
+							eventBus.fireEvent(new SquareClickEvent(ClickType.LEFTCLICK, xd, yd));
 						}
 					}
 				}
 			}
 			
 			if (width*height-exposedCount == mineCount) {
-				gameStatus = GameStatus.WON;
+				setGameStatus(GameStatus.WON);
 			}
 		}
 	}
 	
-	public void rightclick(int x, int y) {
+	private void rightclick(int x, int y) {
 		if (gameStatus!=GameStatus.PLAYING || exposed[x][y]) {
 			return;
 		}
@@ -212,5 +216,19 @@ public class MineField {
 	
 	public int getFlaggedNeighbours(int x, int y){
 		return flaggedNeighbourCount[x][y];
+	}
+	
+	private void setGameStatus(GameStatus updatedGameStatus) {
+		if (gameStatus != updatedGameStatus) {
+			gameStatus = updatedGameStatus;
+			eventBus.fireEvent(new GameStatusEvent(gameStatus));
+			for (int xd=0; xd<width; xd++){
+				for (int yd=0; yd<width; yd++){
+					if(mines[xd][yd] || flagged[xd][yd]) {
+						eventBus.fireEvent(new SquareUpdateEvent(xd, yd));
+					}
+				}
+			}
+		}
 	}
 }

@@ -1,6 +1,6 @@
 /* http://webdesignerwall.com/tutorials/css3-gradient-buttons */
 
-.MineBox {
+.MineBox, .RestartButton, .AIButton {
 	width: 11px;
 	height: 14px;
 	display: inline-block;
@@ -20,6 +20,7 @@
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
 	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
 	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	
 	cursor: default;	
 	
 	-webkit-touch-callout: none;
@@ -28,6 +29,20 @@
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+}
+
+.RestartButton {
+	width: 36px;
+	height: 36px;
+}
+
+.AIButton {
+	width: 52px;
+	height: 15px;
+	padding-top: 6px;
+	padding-bottom: 8px;
+	padding-left: 18px !important;
+	padding-right: 2px !important;
 }
 
 .MineBox:hover {
@@ -77,19 +92,19 @@
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#AA1317', endColorstr='#ED1C24');
 }
 
-.MineBox-exposed {
+.MineBox-exposed, .RestartButton, .AIButton {
 	background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#EDEDED));
 	background: -moz-linear-gradient(center top , #FFFFFF, #EDEDED) repeat scroll 0 0 transparent;
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#EDEDED');
 	border: 1px solid #B7B7B7;
 	color: #606060;
 }
-.MineBox-exposed:hover {
+.MineBox-exposed:hover, .RestartButton:hover, .AIButton:hover {
 	background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#DCDCDC));
 	background: -moz-linear-gradient(center top , #FFFFFF, #DCDCDC) repeat scroll 0 0 transparent;
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DCDCDC');
 }
-.MineBox-exposed:active {
+.MineBox-exposed:active, .RestartButton:active, .AIButton:active {
 	background: -webkit-gradient(linear, left top, left bottom, from(#EDEDED), to(#FFFFFF));
 	background: -moz-linear-gradient(center top , #EDEDED, #FFFFFF) repeat scroll 0 0 transparent;
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#EDEDED', endColorstr='#FFFFFF');
@@ -143,7 +158,7 @@
 	color: magenta;
 }
 
-.MineBox-image {
+.MineBox-image, .RestartButton-image {
 	pointer-events: none;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -153,3 +168,15 @@
 	user-select: none;
 }
 
+.mousepointer {
+	pointer-events: none;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	text-decoration: none;
+	cursor: default;
+	z-index: 2;
+}

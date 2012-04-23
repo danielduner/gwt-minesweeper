@@ -1,7 +1,7 @@
 package se.danielduner.minesweeper.client;
 
+import se.danielduner.minesweeper.client.PlayingField.ClickType;
 import se.danielduner.minesweeper.client.event.SquareClickEvent;
-import se.danielduner.minesweeper.client.event.SquareClickEvent.SquareClickType;
 import se.danielduner.minesweeper.client.resources.Images;
 
 import com.google.gwt.dom.client.NativeEvent;
@@ -34,7 +34,7 @@ public class Square extends Composite {
 		image = new Image();
 		absolutePanel.add(button, 0, 0);
 		absolutePanel.add(image, 1, 2);
-		button.setStyleName("MineBox");
+		//button.setStyleName("MineBox");
 		setType(value);
 		
 		button.addDomHandler(new ContextMenuHandler() {
@@ -48,7 +48,7 @@ public class Square extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (event.getNativeButton() == NativeEvent.BUTTON_LEFT) {
-					eventBus.fireEvent(new SquareClickEvent(SquareClickType.LEFTCLICK, x, y));
+					eventBus.fireEvent(new SquareClickEvent(ClickType.LEFTCLICK, x, y));
 				}
 			}
 		});
@@ -57,7 +57,7 @@ public class Square extends Composite {
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
 				if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT) {
-					eventBus.fireEvent(new SquareClickEvent(SquareClickType.RIGHTCLICK, x, y));
+					eventBus.fireEvent(new SquareClickEvent(ClickType.RIGHTCLICK, x, y));
 				}
 			}
 		});
@@ -71,6 +71,7 @@ public class Square extends Composite {
 		switch (value) {
 		case MineField.HIDDEN:
 			setImage(emptyImage);
+			button.setStyleName("MineBox");
 			button.setStyleDependentName("hidden", true);
 			break;
 		case MineField.FLAGGED:
@@ -96,7 +97,7 @@ public class Square extends Composite {
 		case 0:
 			setImage(emptyImage);
 			button.setStyleDependentName("exposed", true);
-			button.setStyleDependentName(Integer.toString(value), true);
+			button.setStyleDependentName("0", true);
 			break;
 		default:
 			button.setText(Integer.toString(value));
