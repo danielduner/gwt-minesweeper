@@ -2,15 +2,12 @@ package se.danielduner.minesweeper.client;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Random;
 
-import se.danielduner.minesweeper.client.MineSweeperAI.GameStatus;
 import se.danielduner.minesweeper.client.PlayingField.ClickType;
 
 public class StupidAI {
 	private MineField field;
-	private Random random = new Random();
-	private int nextX=0, nextY=0;
+	private int nextX=5, nextY=4;
 	private ClickType clickType = null;
 	
 	public StupidAI(MineField minefield) {
@@ -19,6 +16,7 @@ public class StupidAI {
 	
 	public void updateSuggestion() {
 		Queue<Coordinate> coordinateQueue = new LinkedList<Coordinate>();
+		Coordinate stupidGuess = null;
 		int width = field.getWidth();
 		int height = field.getHeight();
 		boolean[][] explored = new boolean[width][height];
@@ -26,6 +24,9 @@ public class StupidAI {
 		explored[nextX][nextY] = true;
 		while (!coordinateQueue.isEmpty()) {
 			Coordinate coordinate = coordinateQueue.poll();
+			if (stupidGuess==null && field.getValue(coordinate.x, coordinate.y)==MineField.HIDDEN) {
+				stupidGuess = coordinate;
+			}
 			int x = coordinate.x;
 			int y = coordinate.y;
 			int hiddenSum = field.getHiddenNeighbours(x, y);
@@ -73,17 +74,11 @@ public class StupidAI {
 			}
 		}
 		
-		System.out.println("Pick at random");
-		while (field.getGameStatus()==GameStatus.PLAYING) {
-			int x = random.nextInt(field.getWidth());
-			int y = random.nextInt(field.getHeight());
-			if (field.getValue(x, y)==MineField.HIDDEN) {
-				nextX = x;
-				nextY = y;
-				clickType = ClickType.LEFTCLICK;
-				return;
-			}
-		}
+		
+		nextX = stupidGuess.x;
+		nextY = stupidGuess.y;
+		clickType = ClickType.LEFTCLICK;
+		return;
 	}
 	
 	public int getX() {
