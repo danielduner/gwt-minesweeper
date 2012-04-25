@@ -31,10 +31,12 @@ public class StupidAI {
 			if (stupidGuess==null && field.getValue(coordinate.x, coordinate.y)==MineField.HIDDEN) {
 				stupidGuess = coordinate;
 			}
+			
 			int x = coordinate.x;
 			int y = coordinate.y;
 			int hiddenSum = field.getHiddenNeighbours(x, y);
 			int flaggedSum = field.getFlaggedNeighbours(x, y);
+			
 			if (flaggedSum!=field.getValue(x, y) && hiddenSum==field.getValue(x, y)) {
 				for(int yd=y-1; yd<=y+1; yd++) {
 					for(int xd=x-1; xd<=x+1; xd++) {
@@ -47,6 +49,7 @@ public class StupidAI {
 					}
 				}
 			}
+			
 			if (hiddenSum>0 && flaggedSum==field.getValue(x, y)) {
 				for(int yd=y-1; yd<=y+1; yd++) {
 					for(int xd=x-1; xd<=x+1; xd++) {
@@ -78,7 +81,6 @@ public class StupidAI {
 			}
 			
 		}
-		
 		
 		nextX = stupidGuess.x;
 		nextY = stupidGuess.y;

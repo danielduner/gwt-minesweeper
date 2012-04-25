@@ -242,4 +242,8 @@ public class MineField {
 	public boolean inBounds(int x, int y) {
 		return y>=0 && y<height && x>=0	&& x<width;
 	}
+
+	public void setRestart() {
+		gameStatus = GameStatus.RESTART;
+	}
 }

@@ -161,7 +161,7 @@ implements AnimationCallback, SquareClickHandler, SquareUpdateHandler, GameStatu
 		aiPointer.movePointer(aiPointerParkingX, aiPointerParkingY, new MoveCallback() {
 			@Override
 			public void onMoveComplete() {
-				// Do nothing
+				aiButton.setAIMode(AIMode.OFF);
 			}
 		});
 		isAnimating = true;
@@ -191,6 +191,9 @@ implements AnimationCallback, SquareClickHandler, SquareUpdateHandler, GameStatu
 	public void onAIModeUpdate(AIModeEvent event) {
 		switch (event.getAIStatus()) {
 		case ON:
+			if (mineField.getGameStatus()!=GameStatus.PLAYING) {
+				mineField.setRestart();
+			}
 			aiDoNext();
 			break;
 		case OFF:

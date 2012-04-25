@@ -48,4 +48,8 @@ public class AIButton extends Composite implements ClickHandler {
 	public AIMode getAIMode() {
 		return aiMode;
 	}
+	
+	public void setAIMode(AIMode aiMode) {
+		this.aiMode = aiMode;
+	}
 }
