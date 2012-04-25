@@ -57,21 +57,21 @@ public class StupidAI {
 				}
 			} 
 			
-			if(x-1>=0 && y-1>=0 && !explored[x-1][y-1]){
-				coordinateQueue.add(new Coordinate(x-1, y-1));
-				explored[x-1][y-1] = true;
+			if(x-1>=0 && !explored[x-1][y]){
+				coordinateQueue.add(new Coordinate(x-1, y));
+				explored[x-1][y] = true;
 			}
-			if(x+1<field.getWidth() && y-1>=0 && !explored[x+1][y-1]) {
-				coordinateQueue.add(new Coordinate(x+1, y-1));
-				explored[x+1][y-1] = true;
+			if(x+1<field.getWidth() && !explored[x+1][y]) {
+				coordinateQueue.add(new Coordinate(x+1, y));
+				explored[x+1][y] = true;
 			}
-			if(x-1>=0 && y+1<field.getHeight() && !explored[x-1][y+1]) {
-				coordinateQueue.add(new Coordinate(x-1, y+1));
-				explored[x-1][y+1] = true;
+			if(y-1>=0 && !explored[x][y-1]) {
+				coordinateQueue.add(new Coordinate(x, y-1));
+				explored[x][y-1] = true;
 			}
-			if(x+1<field.getWidth() && y+1<field.getHeight() && !explored[x+1][y+1]) {
-				coordinateQueue.add(new Coordinate(x+1, y+1));
-				explored[x+1][y+1] = true;
+			if(y+1<field.getHeight() && !explored[x][y+1]) {
+				coordinateQueue.add(new Coordinate(x, y+1));
+				explored[x][y+1] = true;
 			}
 		}
 		
