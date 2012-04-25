@@ -54,13 +54,13 @@ public class MineField {
 		
 		for(int y=0; y<height; y++) {
 			for(int x=0; x<width; x++) {
-				for(int yd=-1; yd<=1; yd++) {
-					for(int xd=-1; xd<=1; xd++) {
-						if (!(yd==0 && xd==0) && y+yd>=0 && y+yd<height && x+xd>=0 && x+xd<width) {
+				for(int yd=y-1; yd<=y+1; yd++) {
+					for(int xd=x-1; xd<=x+1; xd++) {
+						if (!(yd==y && xd==x) && inBounds(xd, yd)) {
 							if(mines[x][y]){
-								mineNeighbourCount[x+xd][y+yd]++;
+								mineNeighbourCount[xd][yd]++;
 							}
-							hiddenNeighbourCount[x+xd][y+yd]++;
+							hiddenNeighbourCount[xd][yd]++;
 						}
 					}
 				}
@@ -111,8 +111,7 @@ public class MineField {
 			if (getValue(x, y) <= flaggedNeighbourCount[x][y]) {
 				for(int yd=y-1; yd<=y+1; yd++) {
 					for(int xd=x-1; xd<=x+1; xd++) {
-						if (!(yd==y && xd==x) && yd>=0 && yd<height && xd>=0 && xd<width
-								&& getValue(xd, yd)==HIDDEN) {
+						if (!(yd==y && xd==x) && inBounds(xd, yd) && getValue(xd, yd)==HIDDEN) {
 							eventBus.fireEvent(new SquareClickEvent(ClickType.LEFTCLICK, xd, yd));
 						}
 					}
@@ -124,7 +123,7 @@ public class MineField {
 			
 			for(int yd=y-1; yd<=y+1; yd++) {
 				for(int xd=x-1; xd<=x+1; xd++) {
-					if (!(yd==y && xd==x) && yd>=0 && yd<height && xd>=0 && xd<width) {
+					if (!(yd==y && xd==x) && inBounds(xd, yd)) {
 						hiddenNeighbourCount[xd][yd]--;
 					}
 				}
@@ -142,7 +141,7 @@ public class MineField {
 			if (mineNeighbourCount[x][y]==0) {
 				for(int yd=y-1; yd<=y+1; yd++) {
 					for(int xd=x-1; xd<=x+1; xd++) {
-						if (!(yd==y && xd==x) && yd>=0 && yd<height && xd>=0 && xd<width && getValue(xd, yd)==HIDDEN) {
+						if (!(yd==y && xd==x) && inBounds(xd, yd) && getValue(xd, yd)==HIDDEN) {
 							eventBus.fireEvent(new SquareClickEvent(ClickType.LEFTCLICK, xd, yd));
 						}
 					}
@@ -169,10 +168,10 @@ public class MineField {
 	private void flag(int x, int y) {
 		if(!flagged[x][y]) {
 			flagged[x][y] = true;
-			for(int yd=-1; yd<=1; yd++) {
-				for(int xd=-1; xd<=1; xd++) {
-					if (!(yd==0 && xd==0) && y+yd>=0 && y+yd<height && x+xd>=0 && x+xd<width) {
-						flaggedNeighbourCount[x+xd][y+yd]++;
+			for(int yd=y-1; yd<=y+1; yd++) {
+				for(int xd=x-1; xd<=x+1; xd++) {
+					if (!(yd==y && xd==x) && inBounds(xd, yd)) {
+						flaggedNeighbourCount[xd][yd]++;
 					}
 				}
 			}
@@ -183,10 +182,10 @@ public class MineField {
 	private void unflag(int x, int y) {
 		if(flagged[x][y]){
 			flagged[x][y] = false;
-			for(int yd=-1; yd<=1; yd++) {
-				for(int xd=-1; xd<=1; xd++) {
-					if (!(yd==0 && xd==0) && y+yd>=0 && y+yd<height && x+xd>=0 && x+xd<width) {
-						flaggedNeighbourCount[x+xd][y+yd]--;
+			for(int yd=y-1; yd<=y+1; yd++) {
+				for(int xd=x-1; xd<=x+1; xd++) {
+					if (!(yd==y && xd==x) && inBounds(xd, yd)) {
+						flaggedNeighbourCount[xd][yd]--;
 					}
 				}
 			}
@@ -230,5 +229,9 @@ public class MineField {
 				}
 			}
 		}
+	}
+	
+	public boolean inBounds(int x, int y) {
+		return y>=0 && y<height && x>=0	&& x<width;
 	}
 }

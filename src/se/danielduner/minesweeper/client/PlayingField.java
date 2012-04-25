@@ -57,6 +57,7 @@ implements AnimationCallback, SquareClickHandler, SquareUpdateHandler, GameStatu
 		
 		aiPointer = new AIPointer(images, aiPointerParkingX, aiPointerParkingY);
 		absolutePanel.add(aiPointer, aiPointer.getX(), aiPointer.getY());
+		absolutePanel.setStyleName("PlayingField");
 		
 		this.addDomHandler(new ContextMenuHandler() {
 			@Override public void onContextMenu(ContextMenuEvent event) {

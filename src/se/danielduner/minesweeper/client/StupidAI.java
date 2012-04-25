@@ -33,8 +33,7 @@ public class StupidAI {
 			if (flaggedSum!=field.getValue(x, y) && hiddenSum==field.getValue(x, y)) {
 				for(int yd=y-1; yd<=y+1; yd++) {
 					for(int xd=x-1; xd<=x+1; xd++) {
-						if (!(yd==x && xd==y) && yd>=0 && yd<height && xd>=0 && xd<width
-								&& field.getValue(xd, yd)==MineField.HIDDEN) {
+						if (!(yd==x && xd==y) && field.inBounds(xd, yd) && field.getValue(xd, yd)==MineField.HIDDEN) {
 							nextX = xd;
 							nextY = yd;
 							clickType = ClickType.RIGHTCLICK;
@@ -46,8 +45,7 @@ public class StupidAI {
 			if (hiddenSum>0 && flaggedSum==field.getValue(x, y)) {
 				for(int yd=y-1; yd<=y+1; yd++) {
 					for(int xd=x-1; xd<=x+1; xd++) {
-						if (!(yd==x && xd==y) && yd>=0 && yd<height && xd>=0
-								&& xd<width && field.getValue(xd, yd)==MineField.HIDDEN) {
+						if (!(yd==x && xd==y) && field.inBounds(xd, yd) && field.getValue(xd, yd)==MineField.HIDDEN) {
 							nextX = xd;
 							nextY = yd;
 							clickType = ClickType.LEFTCLICK;
