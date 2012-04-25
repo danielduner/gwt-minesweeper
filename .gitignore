@@ -1,0 +1,17 @@
+war/minesweeperai
+gwt-unitCache
+war/WEB-INF/classes
+war/WEB-INF/deploy
+
+appengine-api-1.0-sdk-1.6.3.jar
+datanucleus-core-1.1.5.jar
+gwt-servlet.jar
+appengine-api-labs-1.6.3.jar
+datanucleus-jpa-1.1.5.jar
+jdo2-api-2.3-eb.jar
+appengine-jsr107cache-1.6.3.jar
+geronimo-jpa_3.0_spec-1.1.1.jar
+jsr107cache-1.1.jar
+datanucleus-appengine-1.0.10.final.jar
+geronimo-jta_1.1_spec-1.1.1.jar
+
