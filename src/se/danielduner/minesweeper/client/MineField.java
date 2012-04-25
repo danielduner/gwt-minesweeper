@@ -14,6 +14,8 @@ public class MineField {
 	public static final int HIDDEN=-1, EXPLODEDMINE=-2, HIDDENMINE=-3, FLAGGEDMINE=-4, FLAGGED=-5, FLAGGEDBAD=-6;
 	
 	private EventBus eventBus;
+	
+	private boolean levelGenerated;
 	private boolean[][] mines;
 	private boolean[][] flagged;
 	private boolean[][] exposed;
@@ -34,24 +36,28 @@ public class MineField {
 		this.width = width;
 		this.height = height;
 		this.mineCount = mineCount;
+		
+		levelGenerated = false;
 		mines = new boolean[width][height];
 		flagged = new boolean[width][height];
 		exposed = new boolean[width][height];
 		mineNeighbourCount = new int[width][height];
 		hiddenNeighbourCount = new int[width][height];
 		flaggedNeighbourCount = new int[width][height];
-		
+		setGameStatus(GameStatus.PLAYING);
+	}
+	
+	public void generateLevel(int safeX, int safeY) {
 		int minesPlaced = 0;
 		Random random = new Random();
 		while (minesPlaced<mineCount) {
 			int x = random.nextInt(width);
 			int y = random.nextInt(height);
-			if (!mines[x][y]) {
+			if (!mines[x][y] && !(x==safeX && y==safeY)) {
 				mines[x][y] = true;
 				minesPlaced++;
 			}
 		}
-		
 		for(int y=0; y<height; y++) {
 			for(int x=0; x<width; x++) {
 				for(int yd=y-1; yd<=y+1; yd++) {
@@ -66,8 +72,6 @@ public class MineField {
 				}
 			}
 		}
-		
-		setGameStatus(GameStatus.PLAYING);
 	}
 	
 	public int getValue(int x, int y) {
@@ -100,6 +104,10 @@ public class MineField {
 	}
 	
 	private void leftclick(int x, int y) {
+		if (!levelGenerated) {
+			generateLevel(x, y);
+			levelGenerated = true;
+		}
 		if (gameStatus != GameStatus.PLAYING)
 			return;
 		if (flagged[x][y]) {

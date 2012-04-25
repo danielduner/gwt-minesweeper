@@ -204,10 +204,15 @@ implements AnimationCallback, SquareClickHandler, SquareUpdateHandler, GameStatu
 			Timer t = new Timer() {
 				@Override
 				public void run() {
-					ai.updateSuggestion();
-					if (mineField.getGameStatus()==GameStatus.PLAYING) {
+					switch (mineField.getGameStatus()) {
+					case PLAYING:
+						ai.updateSuggestion();
 						clickGridButton(ai.getX(), ai.getY(), ai.getClickType());
-					} else {
+						break;
+					case WON:
+						parkAIPointer();
+						break;
+					default:
 						clickRestartButton();
 					}
 				}
@@ -215,32 +220,4 @@ implements AnimationCallback, SquareClickHandler, SquareUpdateHandler, GameStatu
 			t.schedule(300);
 		}
 	}
-	
-	/*
-		if (!isAnimating) {
-			return;
-		}
-		private int pointerTargetSquareX, pointerTargetSquareY;
-		private SquareClickType clickType;
-		Widget widget = grid.getWidget(y, x);
-		pointerTargetPixelX = widget.getAbsoluteLeft() + (int)(0.5*widget.getOffsetWidth()) - grid.getAbsoluteLeft();
-		pointerTargetPixelY = widget.getAbsoluteTop() + (int)(0.5*widget.getOffsetHeight()) - grid.getAbsoluteTop();	
-		
-		if (isAnimating) {
-			if(distanceLeft > 2) {
-				AnimationScheduler.get().requestAnimationFrame(this, pointer.getElement());
-			} else {
-				isAnimating = false;
-				switch (clickType) {
-				case LEFTCLICK:
-					mineField.leftclick(pointerTargetSquareX, pointerTargetSquareY);
-					break;
-				case RIGHTCLICK:
-					mineField.rightclick(pointerTargetSquareX, pointerTargetSquareY);
-					break;
-				}
-			}
-		}
-	}
-	*/
 }
