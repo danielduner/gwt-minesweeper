@@ -127,8 +127,8 @@ implements AnimationCallback, SquareClickHandler, SquareUpdateHandler, GameStatu
 			return;
 		}
 		Widget square = grid.getWidget(y, x);
-		int xpixel = square.getAbsoluteLeft();
-		int ypixel = square.getAbsoluteTop();
+		int xpixel = square.getAbsoluteLeft() + (int)(0.4*square.getOffsetWidth()) - absolutePanel.getAbsoluteLeft();
+		int ypixel = square.getAbsoluteTop() + (int)(0.5*square.getOffsetHeight()) - absolutePanel.getAbsoluteTop();
 		aiPointer.movePointer(xpixel, ypixel, new MoveCallback() {
 			@Override
 			public void onMoveComplete() {
@@ -144,8 +144,8 @@ implements AnimationCallback, SquareClickHandler, SquareUpdateHandler, GameStatu
 		if (aiButton.getAIMode()==AIMode.OFF){
 			return;
 		}
-		int xpixel = restartButton.getAbsoluteLeft() + restartButton.getOffsetWidth()/2;
-		int ypixel = restartButton.getAbsoluteTop() + restartButton.getOffsetHeight()/2;
+		int xpixel = restartButton.getAbsoluteLeft() + restartButton.getOffsetWidth()/2 - absolutePanel.getAbsoluteLeft();
+		int ypixel = restartButton.getAbsoluteTop() + restartButton.getOffsetHeight()/2 - absolutePanel.getAbsoluteTop();
 		aiPointer.movePointer(xpixel, ypixel, new MoveCallback() {
 			@Override
 			public void onMoveComplete() {

@@ -1,6 +1,13 @@
 /* http://webdesignerwall.com/tutorials/css3-gradient-buttons */
 
+body {
+	background-color: #EEEEE7 !important;
+}
+
 .PlayingField {
+	position: relative;
+	margin: 0 auto;
+	margin-top: 50px;
 	cursor: default;	
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
