@@ -115,7 +115,7 @@ implements AnimationCallback, SquareClickHandler, SquareUpdateHandler, GameStatu
 		}
 		ai = new StupidAI(mineField);
 		int pixelWidth = mineField.getWidth()*36;
-		int pixelHeight = 95 + mineField.getHeight()*36;
+		int pixelHeight = 105 + mineField.getHeight()*36;
 		absolutePanel.setSize(pixelWidth+"px", pixelHeight+"px");
 		absolutePanel.add(grid, 0, 95);
 		absolutePanel.setWidgetPosition(restartButton, pixelWidth/2-27, 0);

@@ -15,8 +15,11 @@ public interface Images extends ClientBundle {
 	@Source("bang.png")
 	public ImageResource bangImage();
 
-	@Source("face-cool.png")
+	@Source("face-smile.png")
 	public ImageResource facePlaying();
+
+	@Source("face-cool.png")
+	public ImageResource faceAIPlaying();
 
 	@Source("face-win.png")
 	public ImageResource faceWin();

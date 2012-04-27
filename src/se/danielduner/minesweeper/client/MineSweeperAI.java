@@ -24,30 +24,12 @@ public class MineSweeperAI implements EntryPoint {
 		GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 			@Override
 			public void onUncaughtException(Throwable e) {
-				System.err.println("Uncaught Exception: " + e.toString());
+				e.printStackTrace();
 			}
 		});
 		
 		Images images = GWT.create(Images.class);
 		playingField = new PlayingField(eventBus, images);
 		RootPanel.get("playingfield").add(playingField);
-		
-		/*Timer timer = new Timer() {
-			@Override
-			public void run() {
-				if (mineField.getGameStatus()==GameStatus.PLAYING) {
-					ai.act();
-					boxGrid.update();
-					switch (mineField.getGameStatus()) {
-					case PLAYING: label.setText("PLAYING"); break;
-					case LOST: label.setText("LOST"); break;
-					case WON: label.setText("WON"); break;
-					}
-				}
-			}
-		};
-		timer.scheduleRepeating(1000);*/
-		
-		//playingField.clickGridButton(10, 5, ClickType.LEFTCLICK);
 	}
 }

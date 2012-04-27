@@ -1,7 +1,9 @@
 package se.danielduner.minesweeper.client;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 import se.danielduner.minesweeper.client.MineSweeperAI.GameStatus;
 import se.danielduner.minesweeper.client.PlayingField.ClickType;
@@ -10,6 +12,7 @@ public class StupidAI {
 	private MineField field;
 	private int nextX=5, nextY=4;
 	private ClickType clickType = null;
+	private static Random random = new Random();
 	
 	public StupidAI(MineField minefield) {
 		field = minefield;
@@ -63,23 +66,25 @@ public class StupidAI {
 				}
 			} 
 			
+			List<Coordinate> neighbours = new LinkedList<Coordinate>();
 			if(x+1<field.getWidth() && !explored[x+1][y]) {
-				coordinateQueue.add(new Coordinate(x+1, y));
+				neighbours.add(new Coordinate(x+1, y));
 				explored[x+1][y] = true;
 			}
 			if(y+1<field.getHeight() && !explored[x][y+1]) {
-				coordinateQueue.add(new Coordinate(x, y+1));
+				neighbours.add(new Coordinate(x, y+1));
 				explored[x][y+1] = true;
 			}
 			if(x-1>=0 && !explored[x-1][y]){
-				coordinateQueue.add(new Coordinate(x-1, y));
+				neighbours.add(new Coordinate(x-1, y));
 				explored[x-1][y] = true;
 			}
 			if(y-1>=0 && !explored[x][y-1]) {
-				coordinateQueue.add(new Coordinate(x, y-1));
+				neighbours.add(new Coordinate(x, y-1));
 				explored[x][y-1] = true;
 			}
-			
+			shuffle(neighbours);
+			coordinateQueue.addAll(neighbours);
 		}
 		
 		nextX = stupidGuess.x;
@@ -106,5 +111,14 @@ public class StupidAI {
 			this.x = x;
 			this.y = y;
 		}
+	}
+	
+	private static <E> void shuffle(List<E> list) {
+	    for (int i = list.size(); i > 1; i--) {
+	    	int j = random.nextInt(i);
+	    	E tmp = list.get(i-1);
+		    list.set(i-1, list.get(j));
+		    list.set(j, tmp);
+	    }
 	}
 }
