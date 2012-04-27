@@ -35,7 +35,10 @@ implements AnimationCallback, SquareClickHandler, SquareUpdateHandler, GameStatu
 	private Images images;
 	private AbsolutePanel absolutePanel;
 	private RestartButton restartButton;
+	
 	private Grid grid;
+	private Square[][] squares;
+	
 	private MineField mineField;
 	private StupidAI ai;
 	private AIPointer aiPointer;
@@ -76,7 +79,7 @@ implements AnimationCallback, SquareClickHandler, SquareUpdateHandler, GameStatu
 	public void onSquareUpdate(SquareUpdateEvent event) {
 		int x = event.getX();
 		int y = event.getY();
-		((Square)grid.getWidget(y, x)).setType(mineField.getValue(x, y));
+		squares[x][y].setType(mineField.getValue(x, y));
 	}
 	
 	@Override
@@ -95,20 +98,23 @@ implements AnimationCallback, SquareClickHandler, SquareUpdateHandler, GameStatu
 		MineField lastMineField = mineField;
 		mineField = new MineField(eventBus, width, height, mines);
 		if (grid==null || lastMineField==null || lastMineField.getWidth()!=width || lastMineField.getHeight()!=height) {
+			squares = new Square[width][height];
 			if (grid!=null) {
 				grid.remove(grid);
 			}
 			grid = new Grid(width, height);
-			for(int row=0; row<grid.getRowCount(); row++) {
-				for(int column=0; column<grid.getColumnCount(); column++) {
-					grid.setWidget(row, column, new Square(eventBus, images, column, row, mineField.getValue(column, row)));
+			for(int y=0; y<grid.getRowCount(); y++) {
+				for(int x=0; x<grid.getColumnCount(); x++) {
+					Square square = new Square(eventBus, images, x, y, mineField.getValue(x, y));
+					grid.setWidget(y, x, square);
+					squares[x][y] = square;
 				}
 			}
 		} else {
-			for(int row=0; row<grid.getRowCount(); row++) {
-				for(int column=0; column<grid.getColumnCount(); column++) {
-					if (lastMineField.getValue(column, row) != mineField.getValue(column, row)){
-						((Square)grid.getWidget(row, column)).setType(MineField.HIDDEN);
+			for(int y=0; y<grid.getRowCount(); y++) {
+				for(int x=0; x<grid.getColumnCount(); x++) {
+					if (lastMineField.getValue(x, y) != mineField.getValue(x, y)){
+						squares[x][y].setType(MineField.HIDDEN);
 					}
 				}
 			}
