@@ -4,6 +4,15 @@ body {
 	background-color: #EEEEE7 !important;
 }
 
+a, a:link, a:visited, a:hover, a:focus {
+	color: hsl(222, 61%, 30%) !important;
+	text-decoration: none !important;
+	font-weight: bold;
+	position: absolute;
+	right: 10px;
+	top: 5px;
+}
+
 .PlayingField {
 	position: relative;
 	margin: 0 auto;
