@@ -125,7 +125,7 @@ implements AnimationCallback, SquareClickHandler, SquareUpdateHandler, GameStatu
 		absolutePanel.setSize(pixelWidth+"px", pixelHeight+"px");
 		absolutePanel.add(grid, 0, 95);
 		absolutePanel.setWidgetPosition(restartButton, pixelWidth/2-27, 0);
-		absolutePanel.setWidgetPosition(aiButton, pixelWidth/2-35, 60);
+		absolutePanel.setWidgetPosition(aiButton, pixelWidth/2-36, 60);
 	}
 	
 	public void clickGridButton(final int x, final int y, final ClickType clickType) {
