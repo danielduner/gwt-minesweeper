@@ -7,7 +7,7 @@ body {
 .PlayingField {
 	position: relative;
 	margin: 0 auto;
-	margin-top: 50px;
+	margin-top: 35px;
 	cursor: default;	
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
