@@ -7,3 +7,8 @@ Written in Java, compiled to HTML5 using GWT. The entire Eclipse/GWT project is 
 
 License: GPL 2 or later
 
+
+Example image of the AI playing the game:
+
+![](http://img.photobucket.com/albums/v493/DunderDacke/gwt-minesweeper.png)
+
