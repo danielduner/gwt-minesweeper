@@ -7,8 +7,7 @@ Written in Java, compiled to HTML5 using GWT. The entire Eclipse/GWT project is 
 
 License: GPL 2 or later.
 
-Smileys, mines and flag images taken from the GPL minesweeper Gnome Games Mines (gnomine).
-https://live.gnome.org/Mines
+Smileys, mines and flag images taken from the GPL minesweeper [Gnome Games Mines](https://live.gnome.org/Mines).
 
 Example image of the AI playing the game:
 
